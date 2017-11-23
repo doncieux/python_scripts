@@ -2,7 +2,9 @@
 
 import numpy as np
 
+#import matplotlib
 from matplotlib import *
+use('Agg')
 import matplotlib.pyplot as plt
 
 params = {
@@ -45,7 +47,7 @@ def plot_variants_with_variance(data,filename,title):
 
         ax.fill_between(lx,perc_25,perc_75,alpha=0.25, linewidth=0)
         ax.plot(lx,median,linewidth=2, label=variant)
-        ax.legend(loc='upper left')
+        ax.legend(loc='lower right')
 
     ax.set_title(title)
     fig.savefig(filename+".pdf")
