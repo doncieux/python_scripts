@@ -37,7 +37,7 @@ do
     if [ -d $a ]
     then
 	echo -n "Is $a ready to be compressed ..."
-	if [ $(find $a -iname gen_$1 | wc -l ) -eq 1 ]
+	if [ $(find $a -iname gen_$1 | wc -l ) -ge 1 ]
 	then
 	    echo "[OK]"
 	    tar zcvf $a.tar.gz $a >/dev/null && clean_exp $a
