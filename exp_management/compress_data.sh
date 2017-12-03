@@ -36,7 +36,6 @@ for a in exp*
 do
     if [ -d $a ]
     then
-	echo "find $a -iname gen_$LAST_GEN | wc -l"
 	echo -n "Is $a ready to be compressed ..."
 	if [ $(find $a -iname gen_$1 | wc -l ) -eq 1 ]
 	then
