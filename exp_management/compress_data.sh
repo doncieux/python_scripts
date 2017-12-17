@@ -36,14 +36,22 @@ for a in exp*
 do
     if [ -d $a ]
     then
-	echo -n "Is $a ready to be compressed ..."
-	if [ $(find $a -iname gen_$1 | wc -l ) -ge 1 ]
-	then
-	    echo "[OK]"
-	    tar zcvf $a.tar.gz $a >/dev/null && clean_exp $a
-	else
-	    echo "[KO]"
-	fi
+	echo "Processing $a..."
+	for b in $(find $a -maxdepth 1 -mindepth 1 -type d)
+	do
+	    echo -n "Is $b ready to be compressed ..."
+	    if [ $(find $b -iname gen_$1 | wc -l ) -ge 1 ]
+	    then
+		if [ -e $b.tar.gz ]
+		then
+		    echo "[Already compressed...]"
+		else
+		    echo "[OK]"
+		    tar zcvf $b.tar.gz $b >/dev/null && clean_exp $b
+	    else
+		echo "[KO]"
+	    fi
+	done
     fi
 
 done
