@@ -48,6 +48,7 @@ do
 		else
 		    echo "[OK]"
 		    tar zcvf $b.tar.gz $b >/dev/null && clean_exp $b
+		fi
 	    else
 		echo "[KO]"
 	    fi
