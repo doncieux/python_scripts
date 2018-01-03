@@ -6,6 +6,7 @@ import numpy as np
 from matplotlib import *
 use('Agg')
 import matplotlib.pyplot as plt
+from itertools import cycle
 
 params = {
     'axes.labelsize': 8,
@@ -19,12 +20,30 @@ params = {
 rcParams.update(params)
 
 
-def plot_variants_with_variance(data,filename,title):
+def plot_variants_with_variance(data,filename,title,axis=[]):
     """Plots the data corresponding to multiple variants with their variance. The arguments are the data, the list of variant names and a filename to save the figure. The data is a dictionary that associates to a variant name a dictionay that associates a list of variants values to each x value.   
     """
 
+
+    color=['b','g','r','c','m','y','k']
+    ls=['-','--','-.',':']
+    marker=['+','*','.',',','o','v','^','<','>']
+
+    styles=[]
+
+    for l in ls:
+        for c in color:
+            styles.append(c+l)
+            
+
     fig=plt.figure()
     ax=fig.add_subplot(111)
+
+    if (len(axis)==4):
+        ax.axis(axis)
+
+
+    num_style=0
 
     for variant in data.keys():
         print("Plotting data associated to variant: "+variant)
@@ -46,9 +65,12 @@ def plot_variants_with_variance(data,filename,title):
         # print ("      perc_75="+str(perc_75))
 
         ax.fill_between(lx,perc_25,perc_75,alpha=0.25, linewidth=0)
-        ax.plot(lx,median,linewidth=2, label=variant)
-        ax.legend(loc='lower right')
+        ax.plot(lx,median,styles[num_style], label=variant)
+        num_style=num_style+1
+
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+              fancybox=True, shadow=True, ncol=1)
 
     ax.set_title(title)
-    fig.savefig(filename+".pdf")
-    fig.savefig(filename+".svg")
+    fig.savefig(filename+".pdf",bbox_inches="tight")
+    fig.savefig(filename+".svg",bbox_inches="tight")
