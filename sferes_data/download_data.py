@@ -12,7 +12,7 @@ def download_results_variants(data_node, data_dir, data_filename, lvariants):
         if (not(os.path.isdir(variant))):
             os.mkdir(variant)
         os.chdir(variant)
-        ls = subprocess.Popen(['ssh',data_node, 'find',data_dir+"/"+variant,"-iname",data_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        ls = subprocess.Popen(['ssh',data_node, 'find',data_dir+"/"+variant+"/","-iname",data_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err =  ls.communicate()
         #print out
         files=str(out).split("\n")
