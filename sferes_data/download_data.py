@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-def download_results_variants(data_node, data_dir, data_filename, lvariants):
+def download_results_variants(data_node, data_dir, data_filename, lvariants, no_download=False):
     """Download results on the data_node computer and in the data_dir directory. Searches for the data_filename files in the listed variants, which is a list of strings (sferes variants names to look for). The value returned is a dictionary associating a list of files to a variant.
     """
     data_files={}
@@ -27,24 +27,33 @@ def download_results_variants(data_node, data_dir, data_filename, lvariants):
             exp_dir=ed[0]
             if (not(os.path.isdir(exp_dir))):
                 os.mkdir(exp_dir)
-            os.system('scp "%s:%s" "%s"' % (data_node, exp_file, exp_dir) )
+            if(not no_download):
+                os.system('scp "%s:%s" "%s"' % (data_node, exp_file, exp_dir) )
             data_files_variants.append(variant+"/"+exp_dir+"/"+data_filename)
         os.chdir("..")
         data_files[variant]=data_files_variants
     return data_files
 
-def download_results_structured_variants(data_node, data_dir, data_filename, mvariants):
+def download_results_structured_variants(data_node, data_dir, data_filename, mvariants,no_download=False, dfiles_dict = None):
     """Download results on the data_node computer and in the data_dir directory. Searches for the data_filename files in the listed variants, which is a dictionary of lists. A map is used in order to structure the list of variants into categories. The value returned is a dictionary associating to each variant category a dictionary associating a variant name to a list of files. 
     """
-    data_files={}
+    data_files= {} if not dfiles_dict else dfiles_dict
     for setup in mvariants.keys():
         print("Setup: "+setup)
         if (not(os.path.isdir(setup))):
             os.mkdir(setup)
         os.chdir(setup)
-        df=download_results_variants(data_node, data_dir, data_filename, mvariants[setup])
+        df=download_results_variants(data_node, data_dir, data_filename, mvariants[setup], no_download)
         for v in df.keys():
             df[v]=map(lambda x:setup+"/"+x,df[v])
-        data_files[setup]=df
+        if setup not in data_files.keys():
+            data_files[setup]=df
+        else:
+            for v in df.keys():
+                if v in data_files[setup].keys():
+                    data_files[setup][v] += df[v]
+                else:
+                    data_files[setup][v] = df[v]
+        #print df
         os.chdir("..")
     return data_files

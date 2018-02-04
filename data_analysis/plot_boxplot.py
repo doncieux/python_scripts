@@ -52,7 +52,10 @@ def plot_boxplot(data,filename,title,gen, names={}):
     y_min=10000
     y_max=-10000
 
-    for variant in data.keys():
+    datakeys = data.keys()
+    datakeys.sort()
+
+    for variant in datakeys:
         print("Plotting data associated to variant: "+variant)
         lx=data[variant].keys()
 
@@ -104,12 +107,15 @@ def plot_boxplot(data,filename,title,gen, names={}):
         bp['whiskers'][i*2].set_linewidth(2)
         bp['whiskers'][i*2 + 1].set_linewidth(2)
         # top and bottom fliers
-        bp['fliers'][i * 2].set(markerfacecolor=colors[i % len(colors)],
+        #bp['fliers'][i * 2].set(markerfacecolor=colors[i % len(colors)],
+        #                        marker='o', alpha=0.75, markersize=6,
+        #                        markeredgecolor='none')
+        #bp['fliers'][i * 2 + 1].set(markerfacecolor=colors[i % len(colors)],
+        #                            marker='o', alpha=0.75, markersize=6,
+        #                            markeredgecolor='none')
+        bp['fliers'][i].set(markerfacecolor=colors[i % len(colors)],
                                 marker='o', alpha=0.75, markersize=6,
                                 markeredgecolor='none')
-        bp['fliers'][i * 2 + 1].set(markerfacecolor=colors[i % len(colors)],
-                                    marker='o', alpha=0.75, markersize=6,
-                                    markeredgecolor='none')
         bp['medians'][i].set_color('black')
         bp['medians'][i].set_linewidth(3)
         # and 4 caps to remove
@@ -129,7 +135,10 @@ def plot_boxplot(data,filename,title,gen, names={}):
     ax.set_xticklabels(bp_name, rotation=40, ha='right')
 
 
-    ax.set_title(title)
+    ax.set_ylim([y_min-0.01*(y_max-y_min),y_max+(y_max-y_min)*0.01])
+    ax.set_ylabel("max fitness")
+    
+#    ax.set_title(title)
     plt.margins(0.2)
     plt.subplots_adjust(bottom=0.15)
 
@@ -203,9 +212,11 @@ def plot_boxplot(data,filename,title,gen, names={}):
     ax.set_axisbelow(True)
     ax.set_xticklabels(bp_name, rotation=40, ha='right')
 
-    ax.set_ylim([y_min-0.1*(y_max-y_min),y_max+(y_max-y_min)*0.1])
-
-    ax.set_title(title)
+    #ax.set_ylim([y_min-0.1*(y_max-y_min),y_max+(y_max-y_min)*0.1])
+    ax.set_ylim([y_min-0.01*(y_max-y_min),y_max+(y_max-y_min)*0.01])
+    ax.set_ylabel("max fitness")
+    
+#    ax.set_title(title)
     plt.margins(0.2)
     plt.subplots_adjust(bottom=0.15)
 

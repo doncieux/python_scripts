@@ -20,7 +20,7 @@ params = {
 rcParams.update(params)
 
 
-def plot_variants_with_variance(data,filename,title,axis=[]):
+def plot_variants_with_variance(data,filename,title,axis=[],names={}):
     """Plots the data corresponding to multiple variants with their variance. The arguments are the data, the list of variant names and a filename to save the figure. The data is a dictionary that associates to a variant name a dictionay that associates a list of variants values to each x value.   
     """
 
@@ -45,7 +45,10 @@ def plot_variants_with_variance(data,filename,title,axis=[]):
 
     num_style=0
 
-    for variant in data.keys():
+    datakeys = data.keys()
+    datakeys.sort()
+
+    for variant in datakeys:
         print("Plotting data associated to variant: "+variant)
         #print(str(data[variant]))
         lx=data[variant].keys()
@@ -64,13 +67,21 @@ def plot_variants_with_variance(data,filename,title,axis=[]):
         # print ("      perc_25="+str(perc_25))
         # print ("      perc_75="+str(perc_75))
 
+        mylabel = variant if variant not in names.keys() else names[variant]
+
         ax.fill_between(lx,perc_25,perc_75,alpha=0.25, linewidth=0)
-        ax.plot(lx,median,styles[num_style], label=variant)
+        ax.plot(lx,median,styles[num_style], label=mylabel)
         num_style=num_style+1
 
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+    ax.set_xlabel("generation")
+    ax.set_ylabel("max fitness")
+    ax.legend(loc='lower right', bbox_to_anchor=(1., 0.),
               fancybox=True, shadow=True, ncol=1)
+#    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+#              fancybox=True, shadow=True, ncol=1)
+#    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+#              fancybox=True, shadow=True, ncol=1)
 
-    ax.set_title(title)
+#    ax.set_title(title)
     fig.savefig(filename+".pdf",bbox_inches="tight")
     fig.savefig(filename+".svg",bbox_inches="tight")
