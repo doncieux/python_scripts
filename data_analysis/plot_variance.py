@@ -10,7 +10,7 @@ from itertools import cycle
 
 params = {
     'axes.labelsize': 8,
-    'text.fontsize': 8,
+    'font.size': 8,
     'legend.fontsize': 10,
     'xtick.labelsize': 10,
     'ytick.labelsize': 10,
@@ -20,7 +20,7 @@ params = {
 rcParams.update(params)
 
 
-def plot_variants_with_variance(data,filename,title,axis=[],names={}):
+def plot_variants_with_variance(data,filename,title,axis=[],names={},xlabel="generation",ylabel="max fitness",orderedkeys=None,colordict=None,central_tendancy_estimator=np.median):
     """Plots the data corresponding to multiple variants with their variance. The arguments are the data, the list of variant names and a filename to save the figure. The data is a dictionary that associates to a variant name a dictionay that associates a list of variants values to each x value.   
     """
 
@@ -45,8 +45,11 @@ def plot_variants_with_variance(data,filename,title,axis=[],names={}):
 
     num_style=0
 
-    datakeys = data.keys()
-    datakeys.sort()
+    if orderedkeys:
+        datakeys = orderedkeys
+    else:
+        datakeys = data.keys()
+        datakeys.sort()
 
     for variant in datakeys:
         print("Plotting data associated to variant: "+variant)
@@ -58,7 +61,7 @@ def plot_variants_with_variance(data,filename,title,axis=[],names={}):
         perc_75=[]
 
         for x in lx:
-            median.append(np.median(data[variant][x]))
+            median.append(central_tendancy_estimator(data[variant][x]))
             perc_25.append(np.percentile(data[variant][x],25))
             perc_75.append(np.percentile(data[variant][x],75))
 
@@ -70,14 +73,21 @@ def plot_variants_with_variance(data,filename,title,axis=[],names={}):
         mylabel = variant if variant not in names.keys() else names[variant]
 
         ax.fill_between(lx,perc_25,perc_75,alpha=0.25, linewidth=0)
-        ax.plot(lx,median,styles[num_style], label=mylabel)
+        if not colordict:
+            ax.plot(lx,median,styles[num_style], label=mylabel)
+        else:
+            ax.plot(lx,median,color=colordict[variant], label=mylabel)
         num_style=num_style+1
 
-    ax.set_xlabel("generation")
-    ax.set_ylabel("max fitness")
-    ax.legend(loc='lower right', bbox_to_anchor=(1., 0.),
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+#    ax.legend(loc='lower right', bbox_to_anchor=(1., 0.), # lower right
+#              fancybox=True, shadow=True, ncol=1)
+    ax.legend(loc='upper left', bbox_to_anchor=(0., 1.), # top left
               fancybox=True, shadow=True, ncol=1)
-#    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+#    ax.legend(loc='upper right', bbox_to_anchor=(1., 1.), # top right
+#              fancybox=True, shadow=True, ncol=1)
+#    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), # below
 #              fancybox=True, shadow=True, ncol=1)
 #    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
 #              fancybox=True, shadow=True, ncol=1)

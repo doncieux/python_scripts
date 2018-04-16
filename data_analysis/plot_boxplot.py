@@ -18,7 +18,7 @@ import brewer2mpl
 params = {
     'axes.labelsize': 8,
     'text.fontsize': 8,
-    'legend.fontsize': 10,
+    'font.size': 10,
     'xtick.labelsize': 10,
     'ytick.labelsize': 10,
     'text.usetex': False #,
@@ -39,7 +39,7 @@ def stars(p):
         return "-"
 
 
-def plot_boxplot(data,filename,title,gen, names={}):
+def plot_boxplot(data,filename,title,gen, names={},ylabel="max fitness",orderedkeys=None,colordict=None):
     """Plots the data corresponding to multiple variants with their variance. The arguments are the data, the list of variant names and a filename to save the figure. The data is a dictionary that associates to a variant name a dictionay that associates a list of variants values to each x value.   
     """
 
@@ -52,8 +52,11 @@ def plot_boxplot(data,filename,title,gen, names={}):
     y_min=10000
     y_max=-10000
 
-    datakeys = data.keys()
-    datakeys.sort()
+    if orderedkeys:
+        datakeys = orderedkeys
+    else:
+        datakeys = data.keys()
+        datakeys.sort()
 
     for variant in datakeys:
         print("Plotting data associated to variant: "+variant)
@@ -91,19 +94,21 @@ def plot_boxplot(data,filename,title,gen, names={}):
         box.set_linewidth(0)
         boxX = []
         boxY = []
+        col = colors[i % len(colors)] if not colordict else colordict[datakeys[i]]
         for j in range(5):
             boxX.append(box.get_xdata()[j])
             boxY.append(box.get_ydata()[j])
             boxCoords = zip(boxX,boxY)
-            boxPolygon = Polygon(boxCoords, facecolor = colors[i % len(colors)], linewidth=0)
+            boxPolygon = Polygon(boxCoords, facecolor = col, linewidth=0)
             ax.add_patch(boxPolygon)
 
 
     for i in range(0, len(bp['boxes'])):
-        bp['boxes'][i].set_color(colors[i % len(colors)])
+        col = colors[i % len(colors)] if not colordict else colordict[datakeys[i]]
+        bp['boxes'][i].set_color(col)
         # we have two whiskers!
-        bp['whiskers'][i*2].set_color(colors[i % len(colors)])
-        bp['whiskers'][i*2 + 1].set_color(colors[i % len(colors)])
+        bp['whiskers'][i*2].set_color(col)
+        bp['whiskers'][i*2 + 1].set_color(col)
         bp['whiskers'][i*2].set_linewidth(2)
         bp['whiskers'][i*2 + 1].set_linewidth(2)
         # top and bottom fliers
@@ -113,7 +118,7 @@ def plot_boxplot(data,filename,title,gen, names={}):
         #bp['fliers'][i * 2 + 1].set(markerfacecolor=colors[i % len(colors)],
         #                            marker='o', alpha=0.75, markersize=6,
         #                            markeredgecolor='none')
-        bp['fliers'][i].set(markerfacecolor=colors[i % len(colors)],
+        bp['fliers'][i].set(markerfacecolor=col,
                                 marker='o', alpha=0.75, markersize=6,
                                 markeredgecolor='none')
         bp['medians'][i].set_color('black')
@@ -136,7 +141,7 @@ def plot_boxplot(data,filename,title,gen, names={}):
 
 
     ax.set_ylim([y_min-0.01*(y_max-y_min),y_max+(y_max-y_min)*0.01])
-    ax.set_ylabel("max fitness")
+    ax.set_ylabel(ylabel)
     
 #    ax.set_title(title)
     plt.margins(0.2)
@@ -214,7 +219,7 @@ def plot_boxplot(data,filename,title,gen, names={}):
 
     #ax.set_ylim([y_min-0.1*(y_max-y_min),y_max+(y_max-y_min)*0.1])
     ax.set_ylim([y_min-0.01*(y_max-y_min),y_max+(y_max-y_min)*0.01])
-    ax.set_ylabel("max fitness")
+    ax.set_ylabel(ylabel)
     
 #    ax.set_title(title)
     plt.margins(0.2)

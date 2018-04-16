@@ -18,7 +18,7 @@ def from_file_to_data(files,lcol_num,col_num_main,filter_values,check_data_size=
         print("Extracted "+str(len(fdata))+" in the file (len="+str(len(filter_values))+")")
         if ((not check_data_size) or (len(fdata)==len(filter_values))):
             data.append(fdata)
-            #print "Extracted "+str(len(fdata))+" lines from "+file+" "+str(fdata)
+            #print "Extracted "+str(len(fdata))+" lines from "+file#+" "+str(fdata)
     print("From "+str(len(files))+" files, "+str(len(data))+" allowed to extract data")
     return data
 
