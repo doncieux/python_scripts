@@ -14,7 +14,9 @@ params = {
     'legend.fontsize': 10,
     'xtick.labelsize': 10,
     'ytick.labelsize': 10,
-    'text.usetex': False #,
+    'text.usetex': False, #,
+    'pdf.fonttype': 42, # Avoid Type3 fonts in PDF for submission
+    'ps.fonttype': 42
 #    'figure.figsize': [4.5, 4.5]
 }
 rcParams.update(params)

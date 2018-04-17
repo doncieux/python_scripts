@@ -59,14 +59,14 @@ def download_results_structured_variants(data_node, data_dir, data_filename, mva
         df=download_results_variants(data_node, data_dir, data_filename, mvariants[setup], no_download, initial_data_files = df_init)
         for v in df.keys():
             df[v]=map(lambda x:setup+"/"+x,df[v])
-        if setup not in data_files.keys():
-            data_files[setup]=df
-        else:
-            for v in df.keys():
-                if v in data_files[setup].keys():
-                    data_files[setup][v] += df[v]
-                else:
-                    data_files[setup][v] = df[v]
+#        if setup not in data_files.keys():
+        data_files[setup]=df
+#        else:
+#            for v in df.keys():
+#                if v in data_files[setup].keys():
+#                    data_files[setup][v] += df[v]
+#                else:
+#                    data_files[setup][v] = df[v]
         #print df
         os.chdir("..")
     return data_files
