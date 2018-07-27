@@ -50,7 +50,7 @@ def plot_boxplot(data,filename,title,gen, names={},ylabel="max fitness",orderedk
     """Plots the data corresponding to multiple variants with their variance. The arguments are the data, the list of variant names and a filename to save the figure. The data is a dictionary that associates to a variant name a dictionay that associates a list of variants values to each x value.   
     """
 
-    fig=plt.figure()
+    fig=plt.figure(figsize=(15,8))
     ax=fig.add_subplot(111)
     
     bp_data=[]
@@ -179,7 +179,7 @@ def plot_boxplot(data,filename,title,gen, names={},ylabel="max fitness",orderedk
       pairwise_corrected_p = {}
       for (n,v) in enumerate(pairwise_raw_p):
           ((i,j), raw_p) = v
-          corrected_p = raw_p*(len(pairwise_raw_p) - n)
+          corrected_p = raw_p*(len(pairwise_raw_p) - n) # Holm-Bonferroni correction
           pairwise_corrected_p[(i,j)] = (raw_p, corrected_p)
       print("Plotting pairwise results")
       for i in range(len(bp_data)):

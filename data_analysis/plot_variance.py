@@ -73,7 +73,6 @@ def plot_variants_with_variance(data,filename,title,axis=[],names={},xlabel="gen
         # print ("      perc_75="+str(perc_75))
 
         mylabel = variant if variant not in names.keys() else names[variant]
-
         ax.fill_between(lx,perc_25,perc_75,alpha=0.25, linewidth=0)
         if not colordict:
             ax.plot(lx,median,styles[num_style], label=mylabel)
@@ -85,12 +84,12 @@ def plot_variants_with_variance(data,filename,title,axis=[],names={},xlabel="gen
     ax.set_ylabel(ylabel)
 #    ax.legend(loc='lower right', bbox_to_anchor=(1., 0.), # lower right
 #              fancybox=True, shadow=True, ncol=1)
-    ax.legend(loc='upper left', bbox_to_anchor=(0., 1.), # top left
-              fancybox=True, shadow=True, ncol=1)
+#    ax.legend(loc='upper left', bbox_to_anchor=(0., 1.), # top left
+#              fancybox=True, shadow=True, ncol=1)
 #    ax.legend(loc='upper right', bbox_to_anchor=(1., 1.), # top right
 #              fancybox=True, shadow=True, ncol=1)
-#    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), # below
-#              fancybox=True, shadow=True, ncol=1)
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), # below
+              fancybox=True, shadow=True, ncol=1)
 #    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
 #              fancybox=True, shadow=True, ncol=1)
 
