@@ -2,7 +2,7 @@
 
 import data_extraction as de
 
-def from_file_to_data(files,lcol_num,col_num_main,filter_values,check_data_size=True):
+def from_file_to_data(files,lcol_num,col_num_main,filter_values,check_data_size=True, get_max=False):
     """From a list of files corresponding to the results from different runs of a same experience which are the files to analyse, extract the values and put them in a data structure. files is the list of files, lcol_num the columns to extract, col_num_main the column number of the main dimension (X-axis), filter_values, the values to keep along the main dimension. The returned value is a list of the data extracted from each file. The files that do not contain enough data are ignored.
     """
     if (col_num_main not in lcol_num):
@@ -13,7 +13,10 @@ def from_file_to_data(files,lcol_num,col_num_main,filter_values,check_data_size=
     data=[]
 
     for file in files:
-        fdata=de.data_extraction(file,lcol_num)
+        if (get_max):
+            fdata=de.data_extraction_max(file,lcol_num)
+        else:
+            fdata=de.data_extraction(file,lcol_num)
         fdata=de.data_filter(fdata,col_num_main_relative, filter_values)
         print("Extracted "+str(len(fdata))+" in the file (len="+str(len(filter_values))+")")
         if ((not check_data_size) or (len(fdata)==len(filter_values))):
